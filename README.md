@@ -1,6 +1,10 @@
 
 ## Express-Docker-Project
 
+Introduction
+
+Rules
+
 1. using the Reg to show the different url for the same page:
 ```js
 app.get('^/$|/index(.html)?', (req, res) => {
@@ -40,6 +44,36 @@ app.get('/hello(.html)?',
 app.get('/chain(.html)?', [one, two, three]);
 ```
 
+
+Middlewares
+
+Should know some built-in and third-part middlewares:
+1. `app.use(express.urlencoded({extended: false}))` for C'ontent-type: application/x-www-form-urlencoded' format; 
+2. `app.use(express.json())` for response json format;
+3. `app.use(express.static(path.join(__dirname, 'public')))` for accessing the public static resources, and also need to note that the public is default as the public resource root path, so the path in xxx.html will be `<link rel="stylesheet" href="css/style.css" />`, and we can get it by visit 'http://localhost:3500/css/style.css';
+4. `app.use(cors())` will solve the problem of 'cross-origin-server', but we also can extend the cors middleware by define the whileList:
+```js
+const whiteList = ['https://www.google.com', 'https://www.your-site.com', 'http://127.0.0.1:3500', 'http://localhost:3500'];
+const corsOptions = {
+	origin: (origin, callback) => {
+		if (whiteList.indexOf(origin) !== -1) {
+			callback(null, true) // null for error, and true for 'yes it is same origin'
+		} else {
+			callback(new Error('Not allowed by CORS'))
+		}
+	},
+	optionsSuccessStatus: 200
+}
+app.use(cors(corsOptions));
+```
+5. we also can define the custom middleware, and use `app.use(logger)` to get the info from logEvent;
+6. the custom middleware also can add err args to deal with some error page:
+```js
+const errorHandler = (err, req, res, next) => {
+	console.log(err.stack);
+	res.status(500).send(err.message);
+};
+```
 
 
 
