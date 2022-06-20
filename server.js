@@ -4,6 +4,7 @@ const path = require('path');
 const PORT = process.env.PORT || '3500';
 const express = require('express');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const {logger} = require("./middlewares/logger");
 const {errorHandler} = require("./middlewares/errorHandler");
 const rootRouter = require('./routes/root');
@@ -11,20 +12,32 @@ const subRouter = require('./routes/subdir');
 const {one, two, three} = require("./tests/tests");
 const employeeRouter = require("./routes/api/employeeRouter");
 const {corsOptions} = require("./config/corsOptions");
+const registerRouter = require("./routes/api/registerRouter");
+const loginRouter = require("./routes/api/loginRouter");
+const {verifyJWT} = require("./middlewares/verifyJWT");
+const refreshTokenRouter = require("./routes/api/refreshTokenRouter");
+const logoutRouter = require("./routes/api/logoutRouter");
+const {credentialsMiddleware} = require("./middlewares/credentialsMiddleware");
+
 
 
 const app = express();
 
+app.use(logger);
+
+// deal with the problems of 'Access-Control-Allow-Credentials'
+app.use(credentialsMiddleware);
 
 app.use(cors(corsOptions));
-
-app.use(logger);
 
 // built-in middlewares to handle urlencoded data, the form data will be 'Content-type: application/x-www-form-urlencoded'
 app.use(express.urlencoded({extended: false}));
 
 // built-in middleware for response json format
 app.use(express.json());
+
+// middleware for cookie
+app.use(cookieParser());
 
 //serve static files
 app.use('/', express.static(path.join(__dirname, 'public')));
@@ -33,10 +46,23 @@ app.use('/subdir', express.static(path.join(__dirname, 'public')));
 
 // router acted as middleware
 app.use('/', rootRouter);
-// app.use('/subdir', subRouter);
-app.use('/api/employees', employeeRouter);
+app.use('/subdir', subRouter);
+
+app.use('/api/register', registerRouter);
+app.use('/api/auth', loginRouter);
+
+// get access token from refresh token
+app.use('/api/refresh', refreshTokenRouter);
+app.use('/api/logout', logoutRouter);
+
+
+// add jwt middleware in employees router
+app.use(verifyJWT);
+app.use('/api/employees', verifyJWT, employeeRouter);
 
 // test for middleware
+/*
+
 app.get('/chain(.html)?', [one, two, three]);
 app.get('/hello(.html)?',
 	(req, res, next) => {
@@ -47,6 +73,8 @@ app.get('/hello(.html)?',
 		res.send('hello world');
 	}
 );
+*/
+
 
 
 // handle other no config route

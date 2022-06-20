@@ -1,12 +1,12 @@
 
-// Cross-origin resource sharing
-const whiteList = ['https://www.google.com', 'https://www.your-site.com', 'http://127.0.0.1:3500', 'http://localhost:3500'];
+const {allowedOrigins} = require('./allowedOrigins');
+
 const corsOptions = {
 	origin: (origin, callback) => {
-		if (whiteList.indexOf(origin) !== -1 || !origin) {
-			callback(null, true) // null for error, and true for 'yes it is same origin'
+		if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+			callback(null, true)
 		} else {
-			callback(new Error('Not allowed by CORS'))
+			callback(new Error('Not allowed by CORS'));
 		}
 	},
 	optionsSuccessStatus: 200

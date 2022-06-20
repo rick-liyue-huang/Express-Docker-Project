@@ -4,6 +4,7 @@ const employeeController = require("../../controller/employeeController");
 const employeeRouter = express.Router();
 
 
+
 employeeRouter
 	.route('/')
 	.get(employeeController.getAllEmployees)

@@ -129,3 +129,19 @@ employeeRouter.route('/:id')
 
 The express frameworks is using MVC patter when 
 
+
+#### Auth Router
+
+firstly, use MVC pattern to get the login and register controller and router,
+secondly, use JWT to store the auth user information, note that: 
+1. Access Token: sent as JSON, Client stores in memory, do not store in local storage or cookie;
+2. Refresh Token: sent as httpOnly cookie, not accessible via javascript, must have expiry at some time;
+3. Access Token: issued at authorization, client uses for API access until expires, verified with middleware, new token issued at refresh token request;
+4. Refresh Token: issued at authorization, client uses to request new access token, verified with endpoint and database, must be allowed to expire or logout;
+
+
+I create secrete key in .env file by taping `require('crypto').randomBytes(64).toString('hex')` and get them.
+
+Authentication: the process of verifying who someone is;
+Authorization: the process of verifying what resources a user has access to;
+JSON Web Tokens: confirm authentication, allow access to API endpoints, endpoints provide data resources, use authorization header
