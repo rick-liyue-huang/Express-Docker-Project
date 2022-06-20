@@ -11,3 +11,4 @@
 20220619	23:04:15	ae8965de-775d-4c4a-a4a5-ea619c059f9e	Error -- Not allowed by CORS
 20220619	23:04:45	eacc4de7-bdf9-479c-8bde-63e90d55bb72	Error -- Not allowed by CORS
 20220619	23:07:42	31ff8464-d0ec-48bc-8f58-72481a80dd0b	Error -- Not allowed by CORS
+20220620	09:27:22	ffd3730e-3ab5-4af5-8e27-60acde73a776	Error -- ENOENT: no such file or directory, stat '/Users/rickhuang/WebstormProjects/express-docer-project/routes/views/subdir/index.html'

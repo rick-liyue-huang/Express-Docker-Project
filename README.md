@@ -1,9 +1,9 @@
 
 ## Express-Docker-Project
 
-Introduction
+#### Introduction
 
-Rules
+#### Rules
 
 1. using the Reg to show the different url for the same page:
 ```js
@@ -22,7 +22,16 @@ app.get('/old-page(.html)?', (req, res) => {
 3. for other not yet config page, we should use '*', but put it in the end, but need 'status(404)':
 ```js
 app.get('*', (req, res) => {
-	res.status(404).sendFile(path.join(__dirname, 'views', '404.html'));
+	res.status(404);
+	if (req.accepts('html')) {
+		res.sendFile(path.join(__dirname, 'views', '404.html'));
+	}
+	else if (req.accepts('json')) {
+		res.json({error: '404 not found'})
+	}
+	else {
+		res.type('txt').send('404 not found')
+	}
 });
 ```
 
@@ -45,7 +54,7 @@ app.get('/chain(.html)?', [one, two, three]);
 ```
 
 
-Middlewares
+#### Middlewares
 
 Should know some built-in and third-part middlewares:
 1. `app.use(express.urlencoded({extended: false}))` for C'ontent-type: application/x-www-form-urlencoded' format; 
@@ -75,7 +84,48 @@ const errorHandler = (err, req, res, next) => {
 };
 ```
 
+#### Router
 
+The router can be acted as the middleware, and the static resource also should be add router path respectively.
+```js
+app.use('/', express.static(path.join(__dirname, 'public')));
+app.use('/subdir', express.static(path.join(__dirname, 'public')));
+app.use('/subdir', router);
 
+```
 
+The router methods used here include get, post, put and delete, we can put them together,
+
+```js
+employeeRouter
+	.route('/')
+	.get((req, res) => {
+		res.json(data.empployees)
+	})
+	.post((req, res) => {
+		res.json({
+			'firstname': req.body.firstname,
+			'lastname': req.body.lastname
+		});
+	})
+	.put((req, res) => {
+		res.json({
+			'firstname': req.body.firstname,
+			'lastname': req.body.lastname
+		});
+	})
+	.delete((req, res) => {
+		res.json({'id': req.body.id})
+	});
+
+employeeRouter.route('/:id')
+	.get((req, res) => {
+		res.json({id: req.params.id})
+	})
+
+```
+
+#### MVC pattern
+
+The express frameworks is using MVC patter when 
 

@@ -6,23 +6,16 @@ const express = require('express');
 const cors = require('cors');
 const {logger} = require("./middlewares/logger");
 const {errorHandler} = require("./middlewares/errorHandler");
-
+const rootRouter = require('./routes/root');
+const subRouter = require('./routes/subdir');
+const {one, two, three} = require("./tests/tests");
+const employeeRouter = require("./routes/api/employeeRouter");
+const {corsOptions} = require("./config/corsOptions");
 
 
 const app = express();
 
-// Cross-origin resource sharing
-const whiteList = ['https://www.google.com', 'https://www.your-site.com', 'http://127.0.0.1:3500', 'http://localhost:3500'];
-const corsOptions = {
-	origin: (origin, callback) => {
-		if (whiteList.indexOf(origin) !== -1 || !origin) {
-			callback(null, true) // null for error, and true for 'yes it is same origin'
-		} else {
-			callback(new Error('Not allowed by CORS'))
-		}
-	},
-	optionsSuccessStatus: 200
-}
+
 app.use(cors(corsOptions));
 
 app.use(logger);
@@ -34,36 +27,17 @@ app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 
 //serve static files
-app.use(express.static(path.join(__dirname, 'public')));
+app.use('/', express.static(path.join(__dirname, 'public')));
+app.use('/subdir', express.static(path.join(__dirname, 'public')));
 
-const one = (req, res, next) => {
-	console.log('one');
-	next();
-};
 
-const two = (req, res, next) => {
-	console.log('two');
-	next();
-}
+// router acted as middleware
+app.use('/', rootRouter);
+// app.use('/subdir', subRouter);
+app.use('/api/employees', employeeRouter);
 
-const three = (req, res, next) => {
-	console.log('three');
-	res.send('finished');
-}
-
-app.get('^/$|/index(.html)?', (req, res) => {
-	res.sendFile(path.join(__dirname, 'views', 'index.html'));
-});
-
-app.get('/new-page(.html)?', (req, res) => {
-	res.sendFile(path.join(__dirname, 'views', 'new-page.html'));
-});
-
-//
-app.get('/old-page(.html)?', (req, res) => {
-	res.redirect(301, '/new-page.html'); // 302 by default
-});
-
+// test for middleware
+app.get('/chain(.html)?', [one, two, three]);
 app.get('/hello(.html)?',
 	(req, res, next) => {
 		console.log('attempt to handle hello.html');
@@ -74,8 +48,6 @@ app.get('/hello(.html)?',
 	}
 );
 
-
-app.get('/chain(.html)?', [one, two, three]);
 
 // handle other no config route
 app.get('*', (req, res) => {
