@@ -144,4 +144,6 @@ I create secrete key in .env file by taping `require('crypto').randomBytes(64).t
 
 Authentication: the process of verifying who someone is;
 Authorization: the process of verifying what resources a user has access to;
-JSON Web Tokens: confirm authentication, allow access to API endpoints, endpoints provide data resources, use authorization header
+JSON Web Tokens: confirm authentication, allow access to API endpoints, endpoints provide data resources, use authorization header.
+
+
