@@ -32,7 +32,8 @@ const registerController = async (req, res) => {
 		const newUser = {
 			// get user by name, so donot need id
 			username: username,
-			password: hashedPassword
+			password: hashedPassword,
+			roles: {User: 2000} // add roles
 		};
 		userDB.setUsers([...userDB.users, newUser]);
 
