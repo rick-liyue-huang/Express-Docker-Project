@@ -147,3 +147,10 @@ Authorization: the process of verifying what resources a user has access to;
 JSON Web Tokens: confirm authentication, allow access to API endpoints, endpoints provide data resources, use authorization header.
 
 
+JWT again
+
+Refresh Token Rotation: is a change in strategy from the standard refresh token approach, 
+
+when a new access token is issued, a new refresh token is also issued, this does not eliminate the risk, but it does greatly reduce it.
+a refresh token can only be used once, if reuse is detected, all refresh tokens are invalidated for the user which will force a new login for authentication.
+

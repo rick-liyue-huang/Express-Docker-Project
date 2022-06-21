@@ -16,6 +16,11 @@ const jwt = require('jsonwebtoken');
 const {UserModel} = require("../model/User");
 
 const loginController = async (req, res) => {
+
+	// modified here for refresh token rotation
+	const cookies = req.cookies;
+	console.log(`cookies available at login: ${JSON.stringify(cookies)}`)
+
 	const { username, password } = req.body;
 	if (!username || !password) {
 		return res.status(400).json({ 'message': 'Username and password are required.' });
@@ -42,13 +47,15 @@ const loginController = async (req, res) => {
 				}
 			},
 			process.env.ACCESS_TOKEN_SECRET,
-			{ expiresIn: '1d' }
+			{ expiresIn: '600s' }
 		);
-		const refreshToken = jwt.sign(
+
+		const newRefreshToken = jwt.sign(
 			{ "username": foundUser.username },
 			process.env.REFRESH_TOKEN_SECRET,
 			{ expiresIn: '1d' }
 		);
+
 		// Saving refreshToken with current user
 		/*
 		const otherUsers = userDB.users.filter(person => person.username !== foundUser.username);
@@ -61,12 +68,47 @@ const loginController = async (req, res) => {
 
 		*/
 
-		foundUser.refreshToken = refreshToken;
+		let newRefreshTokenArray =
+			!cookies?.jwt
+				?
+				foundUser.refreshToken
+				:
+				foundUser.refreshToken.filter(rt => rt !== cookies.jwt);
+
+		if (cookies?.jwt) {
+
+			/**
+			 * scenario added here
+			 * 1. user login but never use refresh token and doenot logout
+			 * 2. refresh token is stolen
+			 * 3. if 1 and 2, reuse detection is needed to clear all refresh tokens when user login again
+			 */
+
+			const refreshToken = cookies.jwt;
+			const foundToken = await UserModel.findOne({refreshToken}).exec();
+
+			// detected refresh token reuse
+			if (!foundToken) {
+				console.log('attempt to refresh token reuse at login');
+				newRefreshTokenArray = [];
+			}
+
+			res.clearCookie('jwt', {
+				httpOnly: true,
+				sameSite: 'None',
+				// secure: true
+			});
+		}
+
+
+		// foundUser.refreshToken = refreshToken;
+		foundUser.refreshToken = [...newRefreshTokenArray, newRefreshToken];
+
 		const result = await foundUser.save();
 
 		console.log('result: ', result);
 
-		res.cookie('jwt', refreshToken, {
+		res.cookie('jwt', newRefreshToken, {
 			httpOnly: true,
 			sameSite: 'None',
 			// secure: true,  // need to remove for postman

@@ -14,3 +14,4 @@
 20220620	09:27:22	ffd3730e-3ab5-4af5-8e27-60acde73a776	Error -- ENOENT: no such file or directory, stat '/Users/rickhuang/WebstormProjects/express-docer-project/routes/views/subdir/index.html'
 20220620	22:36:15	7e1d94d0-ff5d-4ef5-a70e-7bc7c319d426	SyntaxError -- Unexpected token { in JSON at position 6
 20220621	10:27:47	6f78f8c7-576d-427e-b3bd-5f043851dfe1	SyntaxError -- Unexpected string in JSON at position 43
+20220621	12:58:59	480e15d7-a731-49f6-a8d1-49e18e8f1849	ReferenceError -- fiels is not defined

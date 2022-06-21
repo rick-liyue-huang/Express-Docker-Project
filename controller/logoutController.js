@@ -48,8 +48,9 @@ const logoutController = async (req, res) => {
 	);
 */
 
-	foundUser.refreshToken = '';
-
+	// delete refresh token in DB
+	// foundUser.refreshToken = '';
+	foundUser.refreshToken = foundUser.refreshToken.filter(rt => rt !== refreshToken);
 	// update the document with save
 	const result = await foundUser.save();
 

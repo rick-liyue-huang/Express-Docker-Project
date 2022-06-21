@@ -20,6 +20,10 @@ const logoutRouter = require("./routes/api/logoutRouter");
 const {credentialsMiddleware} = require("./middlewares/credentialsMiddleware");
 const mongoose = require('mongoose');
 const {connectDB} = require('./config/mongoCon');
+const fileUpload = require('express-fileupload');
+const {filesPayloadExists} = require("./middlewares/filesPayloadExists");
+const {fileExtensionLimit} = require("./middlewares/fileExtensionLimit");
+const {fileSizeLimit} = require("./middlewares/fileSizeLimit");
 
 // connect with mongoDB
 connectDB();
@@ -60,9 +64,36 @@ app.use('/api/auth', loginRouter);
 app.use('/api/refresh', refreshTokenRouter);
 app.use('/api/logout', logoutRouter);
 
+app
+	.post(
+	'/upload',
+		fileUpload({createParentPath: true}),
+		filesPayloadExists,
+		fileExtensionLimit(['.png', '.jpg', '.jpep', '.svg']),
+		fileSizeLimit,
+		(req, res) => {
+			const files = req.files;
+
+			Object.keys(files).forEach(key => {
+				const filepath = path.join(__dirname, 'files', files[key].name);
+				files[key].mv(filepath, (err) => {
+					if (err) {
+						return res.status(500).json({status: 'error', message: err})
+					}
+
+				})
+			})
+
+
+			console.log(files);
+
+			return res.json({status: 'success', message: Object.keys(files).toString()});
+
+		}
+	)
 
 // add jwt middleware in employees router
-app.use(verifyJWT);
+// app.use(verifyJWT);
 app.use('/api/employees', verifyJWT, employeeRouter);
 
 // test for middleware
@@ -106,7 +137,7 @@ mongoose.connection.once('open', () => {
 	app.listen(PORT, () => {
 		console.log(`this server is listening on port of ${PORT}`);
 	});
-	
+
 });
 
 

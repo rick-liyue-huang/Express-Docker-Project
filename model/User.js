@@ -22,7 +22,7 @@ const userSchema = new Schema({
 		type: String,
 		required: true
 	},
-	refreshToken: String,
+	refreshToken: [String], // for refreshToken rotation from type of String
 });
 
 const UserModel = model('User', userSchema);
