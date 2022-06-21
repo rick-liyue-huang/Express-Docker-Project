@@ -1,7 +1,7 @@
 
 const RolesList = {
 	'Admin': 1000,
-	'Editor': 1100,
+	'Editor': 1001,
 	'User': 2000
 }
 

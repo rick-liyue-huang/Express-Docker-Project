@@ -3,7 +3,9 @@ require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const fsPromises = require('fs').promises;
 const path = require('path');
+const {UserModel} = require("../model/User");
 
+/*
 
 const usersDB = {
 	users: require('../model/users.json'),
@@ -11,6 +13,8 @@ const usersDB = {
 		this.users = data
 	}
 };
+*/
+
 
 
 const logoutController = async (req, res) => {
@@ -21,7 +25,9 @@ const logoutController = async (req, res) => {
 	const refreshToken = cookies.jwt;
 
 	// Is refreshToken in db?
-	const foundUser = usersDB.users.find(person => person.refreshToken === refreshToken);
+	// const foundUser = usersDB.users.find(person => person.refreshToken === refreshToken);
+	const foundUser = await UserModel.findOne({refreshToken: refreshToken}).exec();
+
 	if (!foundUser) {
 		res.clearCookie('jwt', {
 			httpOnly: true,
@@ -32,6 +38,7 @@ const logoutController = async (req, res) => {
 	}
 
 	// Delete refreshToken in db
+	/*
 	const otherUsers = usersDB.users.filter(person => person.refreshToken !== foundUser.refreshToken);
 	const currentUser = { ...foundUser, refreshToken: '' };
 	usersDB.setUsers([...otherUsers, currentUser]);
@@ -39,6 +46,14 @@ const logoutController = async (req, res) => {
 		path.join(__dirname, '..', 'model', 'users.json'),
 		JSON.stringify(usersDB.users)
 	);
+*/
+
+	foundUser.refreshToken = '';
+
+	// update the document with save
+	const result = await foundUser.save();
+
+	console.log('result: ', result);
 
 	res.clearCookie('jwt', {
 		httpOnly: true,

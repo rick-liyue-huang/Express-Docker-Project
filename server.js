@@ -18,6 +18,11 @@ const {verifyJWT} = require("./middlewares/verifyJWT");
 const refreshTokenRouter = require("./routes/api/refreshTokenRouter");
 const logoutRouter = require("./routes/api/logoutRouter");
 const {credentialsMiddleware} = require("./middlewares/credentialsMiddleware");
+const mongoose = require('mongoose');
+const {connectDB} = require('./config/mongoCon');
+
+// connect with mongoDB
+connectDB();
 
 
 
@@ -95,6 +100,13 @@ app.get('*', (req, res) => {
 // use custom error handler
 app.use(errorHandler);
 
-app.listen(PORT, () => {
-	console.log(`this server is listening on port of ${PORT}`);
+mongoose.connection.once('open', () => {
+	console.log(`connected with MongoDB`);
+
+	app.listen(PORT, () => {
+		console.log(`this server is listening on port of ${PORT}`);
+	});
+	
 });
+
+
