@@ -52,7 +52,6 @@ app.use(cookieParser());
 app.use('/', express.static(path.join(__dirname, 'public')));
 app.use('/subdir', express.static(path.join(__dirname, 'public')));
 
-
 // router acted as middleware
 app.use('/', rootRouter);
 app.use('/subdir', subRouter);
@@ -69,7 +68,7 @@ app
 	'/upload',
 		fileUpload({createParentPath: true}),
 		filesPayloadExists,
-		fileExtensionLimit(['.png', '.jpg', '.jpep', '.svg']),
+		fileExtensionLimit(['.png', '.jpg', '.jpeg', '.svg']),
 		fileSizeLimit,
 		(req, res) => {
 			const files = req.files;

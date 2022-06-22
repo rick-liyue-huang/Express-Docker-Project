@@ -12,7 +12,7 @@ const userDB = {
 const {UserModel} = require('../model/User');
 const fsPromise = require('fs').promises;
 const path = require('path');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 
 const registerController = async (req, res) => {

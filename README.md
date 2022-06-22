@@ -154,3 +154,35 @@ Refresh Token Rotation: is a change in strategy from the standard refresh token 
 when a new access token is issued, a new refresh token is also issued, this does not eliminate the risk, but it does greatly reduce it.
 a refresh token can only be used once, if reuse is detected, all refresh tokens are invalidated for the user which will force a new login for authentication.
 
+
+
+
+#### Docker
+
+visit the website 'hub.docker.com' and login to search 'node', 
+
+create custom image by creating 'Dockerfile' file and create five layers for docker image:
+```dockerfile
+FROM node:16
+WORKDIR /app
+COPY package.json .
+RUN npm install
+COPY . ./
+EXPOSE 3500
+CMD ["nodemon", "server.js"]
+```
+
+run `docker build . ` to create docker image, and we can find the five layers, but if we run again, it will be cached without coding change.
+run ` docker image ls ` to show the image list. 
+run `docker image rm [image id]` to remove the image.
+run ` docker build -t node-app-image .` will get the completed image by running `docker image ls`.
+after that, run `docker run -d --name node-app node-app-image`, here '--name [docker container name]' and '-d' detach is by default we create a docker container from docker run.
+after create docker container, we run `docker ps -a` to show all the containers.
+
+to kill one docker container to run `docker rm node-app -f`
+we re-create one docker container by ` docker run -p 3500:3500 -d --name node-app node-app-image`, here '3501:3500' for the traffic port from the outside world, and second 3500 means the actual app run in local.
+run `docker exec -it node-app bash` to login the /app directory in container, -it means interactive mode.
+
+create file of '.dockerignore' to ignore some file when creating docker image.
+
+
