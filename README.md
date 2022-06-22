@@ -175,7 +175,7 @@ CMD ["nodemon", "server.js"]
 run `docker build . ` to create docker image, and we can find the five layers, but if we run again, it will be cached without coding change.
 run ` docker image ls ` to show the image list. 
 run `docker image rm [image id]` to remove the image.
-run ` docker build -t node-app-image .` will get the completed image by running `docker image ls`.
+run ` docker build -t node-app-image .` will get the completed image by running `docker image ls`, here '--tag , -t' means Name and optionally a tag in the 'name:tag' format.
 after that, run `docker run -d --name node-app node-app-image`, here '--name [docker container name]' and '-d' detach is by default we create a docker container from docker run.
 after create docker container, we run `docker ps -a` to show all the containers.
 
@@ -185,4 +185,25 @@ run `docker exec -it node-app bash` to login the /app directory in container, -i
 
 create file of '.dockerignore' to ignore some file when creating docker image.
 
+until now, we only create the stale image from local machine!!!
+
+in order to sync the local coding to container coding, we need to add '-v pathtofolderonlocal:pathtofolderoncontainer'
+
+so run ` docker run -v $(pwd):/app -p 3500:3500 -d --name node-app node-app-image`
+but also need to modify to 'CMD ["npm", "run", "dev"]' in Dockerfile
+
+now, we already can sync the container files with local files.
+
+here we also add bind mount in developing stage: `docker run -d -p 3500:3500 -v $(pwd):/app -v /app/node_modules --name node-app node-app-image` means do not ignore the node_modules when sync the files.
+
+for some reason, we do not want to modify the files in container, so we run ` docker run -d -p 3500:3500 -v $(pwd):/app:ro -v /app/node_modules --name node-app node-app-image` for read only
+
+WHEN we change the Dockerfile, we need to kill the old image and run the new one.
+
+we also can run ` docker run -d -v $(pwd):/app:ro -v /app/node_modules -p 3500:4000 --env PORT=4000 --name node-app node-app-image`
+
+
+we can set multiple environment variables by run `docker run -d -v $(pwd):/app:ro -v /app/node_modules --env-file ./.env -p 3500:3500 --name node-app node-app-image`
+
+when run `docker volume ls` we will find multiple volumes, so we can delete them by run `docker volume prune`, we also can delete volume associated with current container by run `docker rm node-app -fv`.
 
