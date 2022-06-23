@@ -9,9 +9,12 @@ const {verifyRoles} = require('../../middlewares/VerifyRoles');
 employeeRouter
 	.route('/')
 	.get(employeeController.getAllEmployees)
-	.post(verifyRoles(RolesList.Admin, RolesList.Editor), employeeController.createNewEmployee)
-	.put(verifyRoles(RolesList.Admin, RolesList.Editor), employeeController.updateEmployee)
-	.delete(verifyRoles(RolesList.Admin), employeeController.deleteEmployee);
+	// .post(verifyRoles(RolesList.Admin, RolesList.Editor), employeeController.createNewEmployee)
+	// .put(verifyRoles(RolesList.Admin, RolesList.Editor), employeeController.updateEmployee)
+	// .delete(verifyRoles(RolesList.Admin), employeeController.deleteEmployee);
+	.post(employeeController.createNewEmployee)
+	.put(employeeController.updateEmployee)
+	.delete(employeeController.deleteEmployee);
 
 employeeRouter
 	.route('/:id')

@@ -289,3 +289,6 @@ I will create the ubantu project in DigitalOcean, and we can run `ssh root@ip ad
 I have to install the docker-compose by run `curl -SL https://github.com/docker/compose/releases/download/v2.6.0/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose` and `/usr/local/bin/docker-compose`. and then we can try by run `docker-compose`.
 
 in order to deploy to digitalocean, I have to modify the 'docker-compose.prod.yml' and create .env in droplet by run `vi .env`, and check by run `ls -la`, and then add `set -o allexport; source /root/.env; set +o allexport` in '.profile'. through `printenv` we can check whether the environment variables is added.
+
+I will create 'app' directory under 'root' in droplet, and run `https://github.com/rick-liyue-huang/Express-Docker-Project.git .` to clone the git code to droplet environment.
+and then run `docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d`
