@@ -284,4 +284,6 @@ I need to create 'nginx/default.conf' file and add nginx service in docker-compo
 
 #### Deploy to DigitalOcean
 
-I will create the ubantu project in DigitalOcean, and we can run `ssh root@ip address of droplet` and input the password to test.
+I will create the ubantu project in DigitalOcean, and we can run `ssh root@ip address of droplet` and input the password to test. and then run `curl -fsSL https://get.docker.com -o get-docker.sh` and run `sh get-docker.sh`.
+
+I have to install the docker-compose by run `curl -SL https://github.com/docker/compose/releases/download/v2.6.0/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose` and `/usr/local/bin/docker-compose`. and then we can try by run `docker-compose`.
