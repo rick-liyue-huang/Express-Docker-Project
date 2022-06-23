@@ -13,5 +13,14 @@ services:
 
     environment:
       - NODE_ENV=production
+      - MONGO_USER=${MONGO_USER}
+      - MONGO_PASSWORD=${MONGO_PASSWORD}
+      #  create development environment variables for redis
+      - REDIS_SESSION_SECRET=${REDIS_SESSION_SECRET}
     command: npm run start
+
+  mongo:
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
 

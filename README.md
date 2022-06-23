@@ -287,3 +287,5 @@ I need to create 'nginx/default.conf' file and add nginx service in docker-compo
 I will create the ubantu project in DigitalOcean, and we can run `ssh root@ip address of droplet` and input the password to test. and then run `curl -fsSL https://get.docker.com -o get-docker.sh` and run `sh get-docker.sh`.
 
 I have to install the docker-compose by run `curl -SL https://github.com/docker/compose/releases/download/v2.6.0/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose` and `/usr/local/bin/docker-compose`. and then we can try by run `docker-compose`.
+
+in order to deploy to digitalocean, I have to modify the 'docker-compose.prod.yml' and create .env in droplet by run `vi .env`, and check by run `ls -la`, and then add `set -o allexport; source /root/.env; set +o allexport` in '.profile'. through `printenv` we can check whether the environment variables is added.
