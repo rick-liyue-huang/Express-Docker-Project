@@ -280,3 +280,8 @@ after config the redis in app, we can run `docker exec -it [redis id] bash` and 
 In order to balance the multiple express container, I need to add nginx container.
 
 I need to create 'nginx/default.conf' file and add nginx service in docker-compose.yml, and we can run ` docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --scale node-app=2` to add two node-app to try the loading balance and reverse proxy. But note: I have to start the nginx service manually each time!!
+
+
+#### Deploy to DigitalOcean
+
+I will create the ubantu project in DigitalOcean, and we can run `ssh root@ip address of droplet` and input the password to test.
