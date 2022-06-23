@@ -25,6 +25,19 @@ const {filesPayloadExists} = require("./middlewares/filesPayloadExists");
 const {fileExtensionLimit} = require("./middlewares/fileExtensionLimit");
 const {fileSizeLimit} = require("./middlewares/fileSizeLimit");
 
+
+// using redis and express-session for docker
+const session = require('express-session');
+const redis = require('redis');
+const {REDIS_URL, REDIS_PORT, REDIS_SESSION_SECRET} = require("./config/config");
+let RedisStore = require('connect-redis')(session);
+let redisClient = redis.createClient({
+	host: REDIS_URL,
+	port: REDIS_PORT
+});
+
+
+
 // connect with mongoDB
 connectDB();
 
@@ -34,10 +47,24 @@ const app = express();
 
 app.use(logger);
 
+app.use(cors(corsOptions));
+
+// will use session in the project
+app.use(session({
+	store: new RedisStore({client: redisClient}),
+	secret: REDIS_SESSION_SECRET,
+	cookie: {
+		secure: false,
+		resave: false,
+		saveUninitialized: false,
+		httpOnly: true, // javascript cannot get it
+		maxAge: 60000
+	}
+}));
+
+
 // deal with the problems of 'Access-Control-Allow-Credentials'
 app.use(credentialsMiddleware);
-
-app.use(cors(corsOptions));
 
 // built-in middlewares to handle urlencoded data, the form data will be 'Content-type: application/x-www-form-urlencoded'
 app.use(express.urlencoded({extended: false}));

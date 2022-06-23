@@ -1,7 +1,7 @@
 version: "3.8"
 
 services:
-  # first app only for the web-app
+  # first service only for the web-app
   node-app:
     build: .
     ports:
@@ -15,7 +15,7 @@ services:
     depends_on:
       - mongo
 
-  # second app for the mongoDB
+  # second service for the mongoDB
   mongo:
     image: mongo
     environment:
@@ -25,6 +25,10 @@ services:
 #    custom the volume to store the data for re-start the mongo container
     volumes:
       - mongo-db:/data/db
+
+#  third service for redis
+  redis:
+    image: redis
 
 volumes:
   mongo-db:

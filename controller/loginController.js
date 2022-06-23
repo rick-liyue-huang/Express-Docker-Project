@@ -29,7 +29,9 @@ const loginController = async (req, res) => {
 	// const foundUser = userDB.users.find(person => person.username === username);
 	const foundUser = await UserModel.findOne({username: username}).exec();
 
-	if (!foundUser) return res.sendStatus(401); //Unauthorized
+	if (!foundUser) {
+		return res.sendStatus(401); //Unauthorized
+	}
 	// evaluate password
 	const match = await bcrypt.compare(password, foundUser.password);
 

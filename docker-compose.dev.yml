@@ -11,14 +11,18 @@ services:
       - /app/node_modules
     environment:
       - NODE_ENV=development
+      #  create development environment variables for mongoDB
       - MONGO_IP=mongo
       - MONGO_PORT=27017
       - MONGO_USER=rickliyuehuang
       - MONGO_PASSWORD=passwordpassword
+      #  create development environment variables for redis
+      - REDIS_SESSION_SECRET=rickliyuehuang
     command: npm run dev
 
-#  create development environment variables
+#  create development environment variables for mongoDB
   mongo:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=rickliyuehuang
       - MONGO_INITDB_ROOT_PASSWORD=passwordpassword
+
