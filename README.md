@@ -270,4 +270,8 @@ Before we using the redis in docker, we need to install the package by runing `n
 
 and then, I add redis service in 'docker-compose.yml'
 
+in 'docker-compose.dev.yml' we need to create variables for redis, and also need to add middleware of session on app in 'server.js'.
+
+after config the redis in app, we can run `docker exec -it [redis id] bash` and then `redis-cli`
+
 

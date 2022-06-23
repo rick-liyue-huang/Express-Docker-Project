@@ -58,6 +58,11 @@ const registerController = async (req, res) => {
 			// 'roles': {User: 2000} // it will add automatically
 		});
 
+		/**
+		 * @define  store the user info in session
+		 */
+		req.session.user = result; 
+
 		console.log('result: ', result);
 
 		res.status(201).json({message: `new user ${username} registered.`})

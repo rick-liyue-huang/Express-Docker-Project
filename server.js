@@ -30,6 +30,7 @@ const {fileSizeLimit} = require("./middlewares/fileSizeLimit");
 const session = require('express-session');
 const redis = require('redis');
 const {REDIS_URL, REDIS_PORT, REDIS_SESSION_SECRET} = require("./config/config");
+const {sessionAuthMiddleware} = require("./middlewares/sessionAuthMiddleware");
 let RedisStore = require('connect-redis')(session);
 let redisClient = redis.createClient({
 	host: REDIS_URL,
@@ -47,9 +48,7 @@ const app = express();
 
 app.use(logger);
 
-app.use(cors(corsOptions));
-
-// will use session in the project
+// will use session in the project, and the cookie key is connect.sid
 app.use(session({
 	store: new RedisStore({client: redisClient}),
 	secret: REDIS_SESSION_SECRET,
@@ -58,9 +57,12 @@ app.use(session({
 		resave: false,
 		saveUninitialized: false,
 		httpOnly: true, // javascript cannot get it
-		maxAge: 60000
+		maxAge: 120000
 	}
 }));
+
+
+app.use(cors(corsOptions));
 
 
 // deal with the problems of 'Access-Control-Allow-Credentials'
@@ -120,7 +122,8 @@ app
 
 // add jwt middleware in employees router
 // app.use(verifyJWT);
-app.use('/api/employees', verifyJWT, employeeRouter);
+app.use('/api/employees', sessionAuthMiddleware, employeeRouter); // here I use express-session
+// app.use('/api/employees', verifyJWT, employeeRouter); // here I use jwt
 
 // test for middleware
 /*
@@ -158,7 +161,7 @@ app.get('*', (req, res) => {
 app.use(errorHandler);
 
 mongoose.connection.once('open', () => {
-	console.log(`connected with MongoDB successfully!!!`);
+	console.log(`connected with MongoDB successfully!!!!`);
 
 	app.listen(PORT, () => {
 		console.log(`this server is listening on port of ${PORT}`);

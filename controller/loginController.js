@@ -38,7 +38,15 @@ const loginController = async (req, res) => {
 
 	if (match) {
 
-		const roles = Object.values(foundUser.roles)
+		const roles = Object.values(foundUser.roles);
+
+		/**
+		 * @define I will use express-session to recognize the auth user !!!
+		 * @type {*}
+		 */
+		req.session.user = foundUser;
+
+
 
 		// create JWTs
 		const accessToken = jwt.sign(

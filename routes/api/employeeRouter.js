@@ -6,7 +6,6 @@ const {RolesList} = require('../../config/rolesList');
 const {verifyRoles} = require('../../middlewares/VerifyRoles');
 
 
-
 employeeRouter
 	.route('/')
 	.get(employeeController.getAllEmployees)
