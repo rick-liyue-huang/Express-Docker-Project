@@ -1,5 +1,7 @@
 version: "3.8"
+
 services:
+  # first app only for the web-app
   node-app:
     build: .
     ports:
@@ -8,3 +10,17 @@ services:
       - PORT=3500
     env_file:
       - ./.env
+
+  # second app for the mongoDB
+  mongo:
+    image: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=rickliyuehuang
+      - MONGO_INITDB_ROOT_PASSWORD=passwordpassword
+
+#    custom the volume to store the data for re-start the mongo container
+    volumes:
+      - mongo-db:/data/db
+
+volumes:
+  mongo-db:

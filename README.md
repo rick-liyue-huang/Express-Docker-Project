@@ -220,3 +220,42 @@ so, we create 'docker-compose.yml', 'docker-compose.dev.yml' and 'docker-compose
 
 modify the 'Dockerfile' and 'docker-compose*' to ignore the dev-dependencies on production stage.
 
+
+
+#### Mongo on Docker
+
+in the file 'Dockerfile', we can create the second service (app) for mongoDB, named 'mongo'. so when we run `docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build` we will get two container, and we run `docker exec -it [mongo id] bash` to enter the mongoDB container environment, and then we can run `mongo -u "username" -p "password"` to enter mongoDB coding environment, in which we will create the mongoDB database and data. 
+
+Here has one problem that: when we 'docker down' the service/container, we will lose the data in mongo service, so we need to modify the 'Dockerfile' and add custom volume to store the data, so we will get file of
+
+```dockerfile
+version: "3.8"
+
+services:
+  # first app only for the web-app
+  node-app:
+    build: .
+    ports:
+      - "3500:3500"
+    environment:
+      - PORT=3500
+    env_file:
+      - ./.env
+
+  # second app for the mongoDB
+  mongo:
+    image: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=rickliyuehuang
+      - MONGO_INITDB_ROOT_PASSWORD=passwordpassword
+
+#    custom the volume to store the data for re-start the mongo container
+    volumes:
+      - mongo-db:/data/db
+
+volumes:
+  mongo-db: 
+```
+
+but remember that: we should delete the container by '-v': `docker-compose -f docker-compose.yml -f docker-compose.dev.yml down`!!!
+
