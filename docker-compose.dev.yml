@@ -6,8 +6,19 @@ services:
       args:
         NODE_ENV: development
     volumes:
-      - ./:/app:ro
+      - ./:/app
+#      - ./:/app:ro
       - /app/node_modules
     environment:
       - NODE_ENV=development
+      - MONGO_IP=mongo
+      - MONGO_PORT=27017
+      - MONGO_USER=rickliyuehuang
+      - MONGO_PASSWORD=passwordpassword
     command: npm run dev
+
+#  create development environment variables
+  mongo:
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=rickliyuehuang
+      - MONGO_INITDB_ROOT_PASSWORD=passwordpassword

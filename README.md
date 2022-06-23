@@ -259,3 +259,6 @@ volumes:
 
 but remember that: we should delete the container by '-v': `docker-compose -f docker-compose.yml -f docker-compose.dev.yml down`!!!
 
+in order to connect with mongoose, we need to run `docker inspect [mongodb id]` to get the ipaddress, and then we can run `docker logs [node-app id]` to see whether it connects with mongoDB.
+
+In order to connect with the same ip address of mongoDB service, we need to create the custom address, named with the matched service name in Dockerfile 'mongo', so we name as 'mongo': `mongodb://rickliyuehuang:passwordpassword@mongo:27017/?authSource=admin`, thus we do not care the changable mongo service ip address after reboot.
