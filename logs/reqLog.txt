@@ -651,3 +651,5 @@
 20220623	12:07:10	10bb9104-4c4f-4d47-a542-d159713f89d9	GET -- undefined -- /api/employees
 20220623	12:07:37	c98ddfca-af6d-4a51-813b-77a8a0e5e07f	GET -- undefined -- /api/employees
 20220623	13:55:47	333ea6c6-df95-4872-b291-f89c6f3c7cf4	POST -- undefined -- /api/register
+20220623	14:02:05	3f6d5a23-3df1-4412-ab52-15a28572352a	POST -- undefined -- /api/register
+20220623	14:03:13	b3171f4f-c3cc-4b74-b4b3-ee97f0445d56	POST -- undefined -- /api/register
