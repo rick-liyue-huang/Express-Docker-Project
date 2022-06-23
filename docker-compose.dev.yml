@@ -1,5 +1,10 @@
 version: "3.8"
 services:
+
+  nginx:
+    ports:
+      - "3500:80"
+
   node-app:
     build:
       context: .

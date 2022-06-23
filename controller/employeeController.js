@@ -13,6 +13,8 @@ const {EmployeeModel} = require("../model/Employee");
 const getAllEmployees = async (req, res) => {
 	// res.json(data.employees);
 
+	console.log('test getAllEmployees --- nginx ')
+
 	const employees = await EmployeeModel.find();
 
 	if (!employees) {

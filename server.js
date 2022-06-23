@@ -46,6 +46,11 @@ connectDB();
 
 const app = express();
 
+app.use(cors(corsOptions));
+
+// for nginx in docker
+app.enable('trust proxy');
+
 app.use(logger);
 
 // will use session in the project, and the cookie key is connect.sid
@@ -60,9 +65,6 @@ app.use(session({
 		maxAge: 120000
 	}
 }));
-
-
-app.use(cors(corsOptions));
 
 
 // deal with the problems of 'Access-Control-Allow-Credentials'

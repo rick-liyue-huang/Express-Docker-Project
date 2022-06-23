@@ -1,7 +1,11 @@
 version: "3.8"
 services:
-  node-app:
 
+  nginx:
+    ports:
+      - "80:80"
+
+  node-app:
     build:
       context: .
       args:
@@ -10,3 +14,4 @@ services:
     environment:
       - NODE_ENV=production
     command: npm run start
+

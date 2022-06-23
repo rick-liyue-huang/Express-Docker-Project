@@ -1,11 +1,21 @@
 version: "3.8"
 
 services:
+  #  fourth service for nginx
+  nginx:
+    image: nginx:stable-alpine
+    ports:
+      - "3500:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+
+
   # first service only for the web-app
   node-app:
     build: .
-    ports:
-      - "3500:3500"
+#    remove ports because of nginx
+#    ports:
+#      - "3500:3500"
     environment:
       - PORT=3500
     env_file:
@@ -30,6 +40,7 @@ services:
 #  third service for redis
   redis:
     image: redis
+
 
 volumes:
   mongo-db:
