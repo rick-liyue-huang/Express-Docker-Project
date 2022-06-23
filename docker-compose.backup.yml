@@ -1,0 +1,16 @@
+version: "3.8"
+services:
+#  first container
+  node-app:
+#    build from Dockerfile
+    build: .
+    ports:
+      - "3500:3500"
+    volumes:
+      - ./:/app:ro
+      - /app/node_modules
+    environment:
+      - PORT=3500
+    env_file:
+      - ./.env
+

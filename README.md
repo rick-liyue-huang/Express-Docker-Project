@@ -207,3 +207,16 @@ we can set multiple environment variables by run `docker run -d -v $(pwd):/app:r
 
 when run `docker volume ls` we will find multiple volumes, so we can delete them by run `docker volume prune`, we also can delete volume associated with current container by run `docker rm node-app -fv`.
 
+'Docker Compose' is a tool for defining and running multi-container Docker applications. With Compose, you use a YAML file to configure your application’s services. Then, with a single command, you create and start all the services from your configuration.
+
+here we create the 'docker-compose.yml' to define the docker compose file, and use it to create the image and container.
+
+run `docker-compose up -d` to create the image and container by 'docker-compose.yml'.
+run `docker-compose down -v` to delete the container and volume
+run `docker-compose up --build -d` to re-build the image and crete the new container
+
+for the different development and production environment, we separate the docker-compose files
+so, we create 'docker-compose.yml', 'docker-compose.dev.yml' and 'docker-compose.prod.yml', and run `docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build` for production environment and run `docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build` for development environment.
+
+modify the 'Dockerfile' and 'docker-compose*' to ignore the dev-dependencies on production stage.
+
