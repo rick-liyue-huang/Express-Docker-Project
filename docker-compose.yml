@@ -11,6 +11,10 @@ services:
     env_file:
       - ./.env
 
+#    confirm the service working sequence
+    depends_on:
+      - mongo
+
   # second app for the mongoDB
   mongo:
     image: mongo
