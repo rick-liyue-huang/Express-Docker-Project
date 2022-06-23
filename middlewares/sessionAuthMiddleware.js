@@ -17,5 +17,4 @@ const sessionAuthMiddleware = (req, res, next) => {
 
 	next();
 }
-
 module.exports = {sessionAuthMiddleware};
